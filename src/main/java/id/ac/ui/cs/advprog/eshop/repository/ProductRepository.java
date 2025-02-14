@@ -23,7 +23,7 @@ public class ProductRepository {
         return productData.iterator();
     }
 
-    public Product findById(int id) {
+    public Product findById(int id) {  // Return product dengan id [id], jika tidak ditemukan return null
         Iterator<Product> productIterator = findAll();
         while (productIterator.hasNext()) {
             Product product = productIterator.next();
@@ -32,7 +32,7 @@ public class ProductRepository {
         return null;
     }
 
-    public void set(int id, Product product) {
+    public void set(int id, Product product) {  // Mengubah product dengan id [id] menjadi [product]
         for (int i = 0; i < productData.size(); i++) {
             if (productData.get(i).getProductId() == id) {
                 productData.set(i, product);
