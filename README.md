@@ -11,3 +11,6 @@ Improvement di source code:
 3. Mengubah template untuk form create product
 
 
+** REFLECTION 2**
+1. Seteleh mengerjakan unit test, saya menyadari ada beberapa kesalahan minor dalam kode saya. Semisal, pada saat create product baru, saya tidak mempertimbangkan jika product sudah memiliki id, sebelumnya saya langsung membuatkan id menggunakan iterator untuk product itu. Banyaknya unit test yang dibutuhkan setiap class bergantung pada berapa banyak skenario yang mungkin untuk class itu. Untuk memastikan jika unit test kita cukup, kita harus bisa mempertimbangkan semua skenario yang dapat menyebabkan kode kita gagal. Jika kita memiliki 100% code coverage, bukan berarti code kita tidak memiliki bug. Kode yang perlu diuji di unit test hanyalah kode yang perlu saja, semisal sebuah fungsi yang trivial seperti penjumlahan dua angka tidak perlu kita lakukan unit test. Karena itu, code coverage yang baik adalah yang mencakup yang diperlukan.
+2. Dengan setup yang sama, maka kode yang dibuat di awalnya kurang lebih akan sama, ini akan mengganggu prinsip clean code. Untuk mengatasinya, kita dapat membuat sebuah abstract class yang akan diinherit oleh kedua class CreateProductFunctionalTest.java dan java class yang baru dibuat.
