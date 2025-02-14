@@ -44,18 +44,11 @@ public class ProductController {
     }
 
     @PostMapping("/edit/{id}")
-    public String editProductPost(@ModelAttribute Product product ,@PathVariable int id, @RequestParam String updatedName, @RequestParam int updatedQuantity) {
+    public String editProductPost(@ModelAttribute Product product , Model model, @PathVariable int id, @RequestParam String updatedName, @RequestParam int updatedQuantity) {
+        product.setProductId(id);
         product.setProductName(updatedName);
         product.setProductQuantity(updatedQuantity);
         service.update(product);
-
-        System.out.println(updatedName);
-        System.out.println(updatedQuantity);
-
-        System.out.println("==========");
-        System.out.println(product.getProductName());
-        System.out.println(product.getProductQuantity());
-
         return "redirect:/product/list";
     }
 }
