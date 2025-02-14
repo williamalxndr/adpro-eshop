@@ -8,3 +8,6 @@ Dalam mengerjakan tutorial dan exercise 1 ini, saya telah menerapkan clean code.
 Improvement di source code:
 1. Mengubah tipe data productId dari String menjadi int
 2. Membuat variabel idIterator untuk id dari product
+3. Mengubah template untuk form create product
+
+
