@@ -14,7 +14,7 @@ public class ProductRepository {
 
     public Product create(Product product) {
         idIterator++;
-        product.setProductId(idIterator);
+        product.setProductId(String.valueOf(idIterator));
         productData.add(product);
         return product;
     }
@@ -23,18 +23,18 @@ public class ProductRepository {
         return productData.iterator();
     }
 
-    public Product findById(int id) {  // Return product dengan id [id], jika tidak ditemukan return null
+    public Product findById(String id) {  // Return product dengan id [id], jika tidak ditemukan return null
         Iterator<Product> productIterator = findAll();
         while (productIterator.hasNext()) {
             Product product = productIterator.next();
-            if (product.getProductId() == id) return product;
+            if (product.getProductId().equals(id)) return product;
         }
         return null;
     }
 
-    public void set(int id, Product product) {  // Mengubah product dengan id [id] menjadi [product]
+    public void set(String id, Product product) {  // Mengubah product dengan id [id] menjadi [product]
         for (int i = 0; i < productData.size(); i++) {
-            if (productData.get(i).getProductId() == id) {
+            if (productData.get(i).getProductId().equals(id)) {
                 productData.set(i, product);
                 return;
             }
