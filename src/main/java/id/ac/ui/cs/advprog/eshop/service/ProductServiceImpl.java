@@ -18,6 +18,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product create(Product product) {
         productRepository.create(product);
+        System.out.println(product.getProductId());
         return product;
     }
 
@@ -28,4 +29,16 @@ public class ProductServiceImpl implements ProductService {
         productIterator.forEachRemaining(allProduct::add);
         return allProduct;
     }
+
+    @Override
+    public Product findById(int id) {
+        return productRepository.findById(id);
+    }
+
+    @Override
+    public void update(Product updatedProduct) {
+        int id = updatedProduct.getProductId();
+        productRepository.set(id, updatedProduct);
+    }
+
 }
