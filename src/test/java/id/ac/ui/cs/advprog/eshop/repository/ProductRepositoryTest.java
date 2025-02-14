@@ -63,4 +63,63 @@ class ProductRepositoryTest {
         assertEquals(product2.getProductId(), savedProduct.getProductId());
         assertFalse(productIterator.hasNext());
     }
+
+    // Unit Test Edit
+    @Test
+    void testEditName() {
+        Product product = new Product();
+        product.setProductId("abc");
+        product.setProductName("teh");
+        product.setProductQuantity(10);
+        productRepository.create(product);
+
+        Product editedProduct = productRepository.findById("abc");
+        editedProduct.setProductName("kopi");
+        productRepository.set("abc", editedProduct);
+
+        Product target = productRepository.findById("abc");
+        assertEquals("kopi", target.getProductName());
+    }
+
+    @Test
+    void testEditQuantity() {
+        Product product = new Product();
+        product.setProductId("abc");
+        product.setProductName("teh");
+        product.setProductQuantity(10);
+        productRepository.create(product);
+
+        Product editedProduct = productRepository.findById("abc");
+        editedProduct.setProductQuantity(20);
+        productRepository.set("abc", editedProduct);
+
+        Product target = productRepository.findById("abc");
+        assertEquals(20, target.getProductQuantity());
+    }
+
+    // Unit Test Delete
+    @Test
+    void testDeleteExistingProduct() {
+        Product product = new Product();
+        product.setProductId("abc");
+        product.setProductName("teh");
+        product.setProductQuantity(10);
+        productRepository.create(product);
+        productRepository.delete(product);
+        Iterator<Product> productIterator = productRepository.findAll();
+        assertFalse(productIterator.hasNext());
+    }
+
+    @Test
+    void testDeleteNonExistingProduct() {
+        Product product = new Product();
+        product.setProductId("aaaaa");
+        product.setProductName("aqua");
+        product.setProductQuantity(0);
+
+        productRepository.delete(product);
+
+        Iterator<Product> productIterator = productRepository.findAll();
+        assertFalse(productIterator.hasNext(), "Repository seharusnya tetap kosong setelah mencoba menghapus produk yang tidak ada");
+    }
 }

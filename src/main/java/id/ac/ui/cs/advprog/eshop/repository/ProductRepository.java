@@ -13,8 +13,10 @@ public class ProductRepository {
     private int idIterator = 0;
 
     public Product create(Product product) {
-        idIterator++;
-        product.setProductId(String.valueOf(idIterator));
+        if (product.getProductId() == null) {
+            idIterator++;
+            product.setProductId(String.valueOf(idIterator));
+        }
         productData.add(product);
         return product;
     }
