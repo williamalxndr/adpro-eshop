@@ -37,14 +37,14 @@ public class ProductController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editProductPage(Model model, @PathVariable int id) {  // Menampilkan halaman untuk edit product
+    public String editProductPage(Model model, @PathVariable String id) {  // Menampilkan halaman untuk edit product
         Product product = service.findById(id);
         model.addAttribute("product", product);
         return "editProduct";
     }
 
     @PostMapping("/edit/{id}")
-    public String editProductPost(@ModelAttribute Product product , Model model, @PathVariable int id, @RequestParam String updatedName, @RequestParam int updatedQuantity) {
+    public String editProductPost(@ModelAttribute Product product , Model model, @PathVariable String id, @RequestParam String updatedName, @RequestParam int updatedQuantity) {
         // Menghandle form submission untuk edit product
         product.setProductId(id);
         product.setProductName(updatedName);
@@ -54,7 +54,7 @@ public class ProductController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteProductPage(Model model, @PathVariable int id) {  // Menghandle button delete di halaman list product
+    public String deleteProductPage(Model model, @PathVariable String id) {  // Menghandle button delete di halaman list product
         Product product = service.findById(id);
         service.delete(product);
         return "redirect:/product/list";
