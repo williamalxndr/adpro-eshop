@@ -13,11 +13,14 @@ public class ProductRepository {
     private int idIterator = 0;
 
     public Product create(Product product) {
+        System.out.println("Creating product in product repository");
         if (product.getProductId() == null) {
             idIterator++;
             product.setProductId(String.valueOf(idIterator));
         }
+        System.out.println("Creating product in product repository");
         productData.add(product);
+        if (productData.isEmpty()) {System.out.println("Failed to create product, productData is empty");}
         return product;
     }
 
@@ -35,6 +38,7 @@ public class ProductRepository {
     }
 
     public void set(String id, Product product) {  // Mengubah product dengan id [id] menjadi [product]
+        if (!product.getProductId().equals(id)) return;
         for (int i = 0; i < productData.size(); i++) {
             if (productData.get(i).getProductId().equals(id)) {
                 productData.set(i, product);
