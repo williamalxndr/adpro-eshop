@@ -19,10 +19,10 @@ jobs:
           java-version: 21
           distribution: 'temurin'
 
-      - name: Build with Maven
-        run: mvn verify -DskipTests
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v4
         env:
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+        run: ./gradlew sonarqube --info
