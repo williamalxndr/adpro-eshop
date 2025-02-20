@@ -46,6 +46,18 @@ class ProductRepositoryTest {
     }
 
     @Test
+    void testCreateWithoutId() {
+        Product product = new Product();
+        product.setProductName("Sampo Cap Bambang");
+        product.setProductQuantity(100);
+        productRepository.create(product);
+
+        Iterator<Product> productIterator = productRepository.findAll();
+        Product target = productIterator.next();
+        assertEquals("1", target.getProductId());
+    }
+
+    @Test
     void testFindAllIfMoreThanOneProduct() {
         Product product1 = new Product();
         product1.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
