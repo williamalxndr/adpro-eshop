@@ -13,13 +13,10 @@ import java.util.Iterator;
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
-    public ProductRepository productRepository;
+    private ProductRepository productRepository;
 
     @Override
     public Product create(Product product) {
-        System.out.println("creating product...");
-        if (productRepository != null) System.out.println("product repository is not null");
-
         productRepository.create(product);
         return product;
     }
@@ -46,6 +43,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(Product product) {
         productRepository.delete(product);
+    }
+
+    public void setRepository(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
 }
