@@ -29,6 +29,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.30</version>
             <scope>provided</scope>
         </dependency>
 
@@ -36,6 +37,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
+            <version>5.10.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -64,6 +66,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.2.2</version> <!-- ✅ Missing version added -->
             </plugin>
 
             <!-- SonarQube Scanner -->
