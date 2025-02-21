@@ -6,7 +6,7 @@ plugins {
 	id("org.sonarqube") version "5.0.0.4638"
 }
 
-sonarqube {
+sonar {
 	properties {
 		property("sonar.projectKey", "williamalxndr_adpro-eshop")
 		property("sonar.organization", "williamalxndr")
