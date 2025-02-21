@@ -3,23 +3,12 @@ plugins {
 	jacoco
 	id("org.springframework.boot") version "3.3.8"
 	id("io.spring.dependency-management") version "1.1.7"
-	id("org.sonarqube") version "6.0.1.5171"
 	id("pmd")
 }
 
 pmd {
 	toolVersion = "7.10.0"
 	ruleSetFiles = files("pmd/ruleset.xml")
-}
-
-sonar {
-	properties {
-		property("sonar.projectKey", "williamalxndr_adpro-eshop")
-		property("sonar.organization", "williamalxndr")
-		property("sonar.host.url", "https://sonarcloud.io")
-		property("sonar.token", System.getenv("SONAR_TOKEN"))
-		property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
-	}
 }
 
 group = "id.ac.ui.cs.advprog"
