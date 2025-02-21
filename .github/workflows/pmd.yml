@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - "**" # Runs on push to any branch
+  pull_request:
 jobs:
   sonarcloud:
     name: Build and analyze
