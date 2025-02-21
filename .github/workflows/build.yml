@@ -1,31 +1,38 @@
-name: Scan
+name: SonarQube
 on:
   push:
-    branches: [ "**" ]
-  pull_request:
-
+    branches:
+      - "**" # Runs on push to any branch
 jobs:
-  sonarqube:
-    name: Build and Analyze
+  sonarcloud:
+    name: Build and analyze
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - name: Set up JDK 21 (Temurin)
         uses: actions/setup-java@v4
         with:
           java-version: 21
           distribution: 'temurin'
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+      - name: Grant execute permission to gradlew
+        run: chmod +x gradlew
 
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-
-      - name: SonarQube Scan
+      - name: Build and analyze with SonarCloud
         env:
-          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
-        run: ./gradlew sonar
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew build sonar --info  # Runs Gradle build + SonarCloud scan
