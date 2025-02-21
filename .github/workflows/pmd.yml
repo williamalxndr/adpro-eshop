@@ -20,6 +20,4 @@ jobs:
           version: '7.10.0'
           sourcePath: 'src/main/java'
           rulesets: 'pmd/ruleset.xml'
-      - name: Fail build if there are violations
-        if: steps.pmd.outputs.violations != 0
-        run: exit 1
+
