@@ -45,4 +45,8 @@ public class ProductServiceImpl implements ProductService {
         productRepository.delete(product);
     }
 
+    public void setRepository(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
 }

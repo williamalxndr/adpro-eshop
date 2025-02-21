@@ -35,6 +35,7 @@ public class ProductRepository {
     }
 
     public void set(String id, Product product) {  // Mengubah product dengan id [id] menjadi [product]
+        if (!product.getProductId().equals(id)) return;
         for (int i = 0; i < productData.size(); i++) {
             if (productData.get(i).getProductId().equals(id)) {
                 productData.set(i, product);
