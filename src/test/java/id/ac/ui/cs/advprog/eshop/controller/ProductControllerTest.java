@@ -45,12 +45,12 @@ class ProductControllerTest {
     void testCreateProductPage() throws Exception {
         var result = mockMvc.perform(get("/product/create"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("createProduct"))
+                .andExpect(view().name("CreateProduct"))
                 .andExpect(model().attributeExists("product"))
                 .andReturn();
 
         assertNotNull(result.getModelAndView());
-        assertEquals("createProduct", result.getModelAndView().getViewName());
+        assertEquals("CreateProduct", result.getModelAndView().getViewName());
     }
 
     @Test
@@ -87,12 +87,12 @@ class ProductControllerTest {
 
         var result = mockMvc.perform(get("/product/list"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("productList"))
+                .andExpect(view().name("ProductList"))
                 .andExpect(model().attributeExists("products"))
                 .andReturn();
 
         assertNotNull(result.getModelAndView());
-        assertEquals("productList", result.getModelAndView().getViewName());
+        assertEquals("ProductList", result.getModelAndView().getViewName());
     }
 
     @Test
@@ -106,12 +106,12 @@ class ProductControllerTest {
 
         var result = mockMvc.perform(get("/product/edit/1"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("editProduct"))
+                .andExpect(view().name("EditProduct"))
                 .andExpect(model().attributeExists("product"))
                 .andReturn();
 
         assertNotNull(result.getModelAndView());
-        assertEquals("editProduct", result.getModelAndView().getViewName());
+        assertEquals("EditProduct", result.getModelAndView().getViewName());
     }
 
     @Test
