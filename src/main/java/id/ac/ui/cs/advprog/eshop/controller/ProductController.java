@@ -15,99 +15,94 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/product")
-public class ProductController {
+public class ProductController implements BaseController<Product> {
 
     @Autowired
     private ProductServiceImpl service;
 
     @GetMapping("/create")
-    public String createProductPage(Model model) {  // Menampilkan halaman create product
+    public String createPage(Model model) {  // Menampilkan halaman create product
         Product product = new Product();
         model.addAttribute("product", product);
         return "CreateProduct";
     }
 
     @PostMapping("/create")
-    public String createProductPost(@ModelAttribute Product product, Model model) {  // Menghandle form submission untuk create product
+    public String createPost(@ModelAttribute Product product, Model model) {  // Menghandle form submission untuk create product
         service.create(product);
         return "redirect:list";
     }
 
     @GetMapping("/list")
-    public String productListPage(Model model) {  // Menampilkan halaman yang berisi semua product
+    public String listPage(Model model) {  // Menampilkan halaman yang berisi semua product
         List<Product> allProduct = service.findAll();
         model.addAttribute("products", allProduct);
         return "ProductList";
     }
 
-    @GetMapping("/edit/{id}")
-    public String editProductPage(Model model, @PathVariable String id) {  // Menampilkan halaman untuk edit product
-        Product product = service.findById(id);
+    @GetMapping("/edit/{productId}")
+    public String editPage(@PathVariable String productId, Model model) {
+        Product product = service.findById(productId);
         model.addAttribute("product", product);
         return "EditProduct";
     }
 
-    @PostMapping("/edit/{id}")
-    public String editProductPost(@ModelAttribute Product product , Model model, @PathVariable String id, @RequestParam String updatedName, @RequestParam int updatedQuantity) {
-        // Menghandle form submission untuk edit product
-        product.setProductId(id);
-        product.setProductName(updatedName);
-        product.setProductQuantity(updatedQuantity);
-        service.update(id, product);
-        return "redirect:/product/list";
+    @PostMapping("/edit")
+    public String editPost(@ModelAttribute Product product, Model model) {
+        service.update(product.getProductId(), product);
+        return "redirect:list";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteProductPage(Model model, @PathVariable String id) {  // Menghandle button delete di halaman list product
+    @PostMapping("/delete")
+    public String delete(@RequestParam("id") String id) {  // Menghandle button delete di halaman list product
         service.deleteById(id);
-        return "redirect:/product/list";
+        return "redirect:list";
     }
 }
 
 @Controller
 @RequestMapping("/car")
-class CarController {
+class CarController implements BaseController<Car> {
     @Autowired
     private CarServiceImpl carService;
 
-    @GetMapping("/createCar")
-    public String createCarPage(Model model) {
+    @GetMapping("/create")
+    public String createPage(Model model) {
         Car car = new Car();
         model.addAttribute("car", car);
         return "CreateCar";
     }
 
-    @PostMapping("/createCar")
-    public String createCarPost(@ModelAttribute Car car, Model model) {
+    @PostMapping("/create")
+    public String createPost(@ModelAttribute Car car, Model model) {
         carService.create(car);
-        return "redirect:listCar";
+        return "redirect:list";
     }
 
-    @GetMapping("/listCar")
-    public String carListPage(Model model) {
+    @GetMapping("/list")
+    public String listPage(Model model) {
         List<Car> allCar = carService.findAll();
         model.addAttribute("cars", allCar);
         return "CarList";
     }
 
-    @GetMapping("/editCar/{carId}")
-    public String editCarPage(@PathVariable String carId, Model model) {
+    @GetMapping("/edit/{carId}")
+    public String editPage(@PathVariable String carId, Model model) {
         Car car = carService.findById(carId);
         model.addAttribute("car", car);
         return "EditCar";
     }
 
-    @PostMapping("/editCar")
-    public String editCarPost(@ModelAttribute Car car, Model model) {
-        System.out.println(car.getCarId());
+    @PostMapping("/edit")
+    public String editPost(@ModelAttribute Car car, Model model) {
         carService.update(car.getCarId(), car);
 
-        return "redirect:listCar";
+        return "redirect:list";
     }
 
-    @PostMapping("/deleteCar")
-    public String deleteCar(@RequestParam("carId") String carId) {
+    @PostMapping("/delete")
+    public String delete(@RequestParam("carId") String carId) {
         carService.deleteById(carId);
-        return "redirect:listCar";
+        return "redirect:list";
     }
 }
