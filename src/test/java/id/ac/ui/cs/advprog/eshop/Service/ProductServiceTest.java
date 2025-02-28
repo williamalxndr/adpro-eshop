@@ -94,7 +94,7 @@ public class ProductServiceTest {
         product.setProductName("teh");
         product.setProductQuantity(50);
         service.create(product);
-        service.delete(product);
+        service.deleteById(product.getProductId());
 
         List<Product> products = service.findAll();
         assertTrue(products.isEmpty());
@@ -114,7 +114,7 @@ public class ProductServiceTest {
 
         service.create(product);
 
-        service.delete(nonExistingProduct);
+        service.deleteById(nonExistingProduct.getProductId());
 
         List<Product> products = service.findAll();
         assertFalse(products.isEmpty());

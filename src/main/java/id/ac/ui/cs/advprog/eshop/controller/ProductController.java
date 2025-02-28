@@ -58,8 +58,7 @@ public class ProductController {
 
     @GetMapping("/delete/{id}")
     public String deleteProductPage(Model model, @PathVariable String id) {  // Menghandle button delete di halaman list product
-        Product product = service.findById(id);
-        service.delete(product);
+        service.deleteById(id);
         return "redirect:/product/list";
     }
 }
@@ -107,7 +106,7 @@ class CarController extends ProductController {
 
     @PostMapping("/deleteCar")
     public String deleteCar(@RequestParam("carId") String carId) {
-        carService.deleteCarById(carId);
+        carService.deleteById(carId);
         return "redirect:listCar";
     }
 }

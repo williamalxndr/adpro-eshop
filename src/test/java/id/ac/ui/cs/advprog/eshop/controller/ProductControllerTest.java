@@ -136,7 +136,7 @@ class ProductControllerTest {
         product.setProductQuantity(5);
 
         when(productService.findById("1")).thenReturn(product);
-        doNothing().when(productService).delete(any(Product.class));
+        doNothing().when(productService).deleteById(any(String.class));
 
         var result = mockMvc.perform(get("/product/delete/1"))
                 .andExpect(status().is3xxRedirection())

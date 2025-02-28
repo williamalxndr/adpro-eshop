@@ -91,7 +91,7 @@ class ProductRepositoryTest {
 
         Product editedProduct = productRepository.findById("abc");
         editedProduct.setProductName("kopi");
-        productRepository.set("abc", editedProduct);
+        productRepository.update("abc", editedProduct);
 
         Product target = productRepository.findById("abc");
         assertEquals("kopi", target.getProductName());
@@ -107,7 +107,7 @@ class ProductRepositoryTest {
 
         Product editedProduct = productRepository.findById("abc");
         editedProduct.setProductQuantity(20);
-        productRepository.set("abc", editedProduct);
+        productRepository.update("abc", editedProduct);
 
         Product target = productRepository.findById("abc");
         assertEquals(20, target.getProductQuantity());
@@ -124,7 +124,7 @@ class ProductRepositoryTest {
         Product editedProduct = productRepository.findById("abc");
         editedProduct.setProductName("kopi");
         editedProduct.setProductQuantity(20);
-        productRepository.set("abc", editedProduct);
+        productRepository.update("abc", editedProduct);
 
         Product target = productRepository.findById("abc");
         assertEquals(20, target.getProductQuantity());
@@ -154,8 +154,8 @@ class ProductRepositoryTest {
         editedProduct1.setProductQuantity(5);
         editedProduct2.setProductQuantity(40);
 
-        productRepository.set("abc", editedProduct1);
-        productRepository.set("def", editedProduct2);
+        productRepository.update("abc", editedProduct1);
+        productRepository.update("def", editedProduct2);
 
         Product target1 = productRepository.findById("abc");
         Product target2 = productRepository.findById("def");
@@ -182,7 +182,7 @@ class ProductRepositoryTest {
 
         Product editedProduct = productRepository.findById("def");
         editedProduct.setProductName("jus");
-        productRepository.set("abc", editedProduct);  // Seharusnya tidak bisa diedit karena editedProduct punya id "def"
+        productRepository.update("abc", editedProduct);  // Seharusnya tidak bisa diedit karena editedProduct punya id "def"
 
         Product target = productRepository.findById("abc");
 
@@ -209,7 +209,7 @@ class ProductRepositoryTest {
         product.setProductName("teh");
         product.setProductQuantity(10);
         productRepository.create(product);
-        productRepository.delete(product);
+        productRepository.delete(product.getProductId());
         Iterator<Product> productIterator = productRepository.findAll();
         assertFalse(productIterator.hasNext());
     }
@@ -221,7 +221,7 @@ class ProductRepositoryTest {
         product.setProductName("aqua");
         product.setProductQuantity(0);
 
-        productRepository.delete(product);
+        productRepository.delete(product.getProductId());
 
         Iterator<Product> productIterator = productRepository.findAll();
         assertFalse(productIterator.hasNext(), "Repository seharusnya tetap kosong setelah mencoba menghapus produk yang tidak ada");
@@ -241,7 +241,7 @@ class ProductRepositoryTest {
         productRepository.create(product1);
         productRepository.create(product2);
 
-        productRepository.delete(product1);
+        productRepository.delete(product1.getProductId());
         Iterator<Product> iterator = productRepository.findAll();
 
         assertTrue(iterator.hasNext());
