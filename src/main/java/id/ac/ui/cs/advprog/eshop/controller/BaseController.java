@@ -14,3 +14,21 @@ public interface BaseController<T> {
     String editPost(@ModelAttribute T item, Model model);
     String delete(@RequestParam("id") String id);
 }
+
+interface CreateController<T> {
+    String createPage(Model model);
+    String createPost(T item, Model model);
+}
+
+interface ListController<T> {
+    String listPage(Model model);
+}
+
+interface UpdateController<T> {
+    String editPage(@PathVariable String id, Model model);
+    String editPost(@ModelAttribute T item, Model model);
+}
+
+interface DeleteController<T> {
+    String delete(@RequestParam("id") String id);
+}
