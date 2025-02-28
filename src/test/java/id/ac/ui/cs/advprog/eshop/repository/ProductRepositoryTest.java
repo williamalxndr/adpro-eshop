@@ -54,7 +54,7 @@ class ProductRepositoryTest {
 
         Iterator<Product> productIterator = productRepository.findAll();
         Product target = productIterator.next();
-        assertEquals("1", target.getProductId());
+        assertEquals(product.getProductId(), target.getProductId());
     }
 
     @Test
@@ -84,49 +84,46 @@ class ProductRepositoryTest {
     @Test
     void testEditName() {
         Product product = new Product();
-        product.setProductId("abc");
         product.setProductName("teh");
         product.setProductQuantity(10);
         productRepository.create(product);
 
-        Product editedProduct = productRepository.findById("abc");
+        Product editedProduct = productRepository.findById(product.getProductId());
         editedProduct.setProductName("kopi");
-        productRepository.set("abc", editedProduct);
+        productRepository.update(product.getProductId(), editedProduct);
 
-        Product target = productRepository.findById("abc");
+        Product target = productRepository.findById(product.getProductId());
         assertEquals("kopi", target.getProductName());
     }
 
     @Test
     void testEditQuantity() {
         Product product = new Product();
-        product.setProductId("abc");
         product.setProductName("teh");
         product.setProductQuantity(10);
         productRepository.create(product);
 
-        Product editedProduct = productRepository.findById("abc");
+        Product editedProduct = productRepository.findById(product.getProductId());
         editedProduct.setProductQuantity(20);
-        productRepository.set("abc", editedProduct);
+        productRepository.update(product.getProductId(), editedProduct);
 
-        Product target = productRepository.findById("abc");
+        Product target = productRepository.findById(product.getProductId());
         assertEquals(20, target.getProductQuantity());
     }
 
     @Test
     void testEditAll() {
         Product product = new Product();
-        product.setProductId("abc");
         product.setProductName("teh");
         product.setProductQuantity(10);
         productRepository.create(product);
 
-        Product editedProduct = productRepository.findById("abc");
+        Product editedProduct = productRepository.findById(product.getProductId());
         editedProduct.setProductName("kopi");
         editedProduct.setProductQuantity(20);
-        productRepository.set("abc", editedProduct);
+        productRepository.update(product.getProductId(), editedProduct);
 
-        Product target = productRepository.findById("abc");
+        Product target = productRepository.findById(product.getProductId());
         assertEquals(20, target.getProductQuantity());
         assertEquals("kopi", target.getProductName());
     }
@@ -136,29 +133,27 @@ class ProductRepositoryTest {
         Product product1 = new Product();
         Product product2 = new Product();
 
-        product1.setProductId("abc");
         product1.setProductName("teh");
         product1.setProductQuantity(10);
         productRepository.create(product1);
 
-        product2.setProductId("def");
         product2.setProductName("kopi");
         product2.setProductQuantity(20);
         productRepository.create(product2);
 
-        Product editedProduct1 = productRepository.findById("abc");
-        Product editedProduct2 = productRepository.findById("def");
+        Product editedProduct1 = productRepository.findById(product1.getProductId());
+        Product editedProduct2 = productRepository.findById(product2.getProductId());
 
         editedProduct1.setProductName("susu");
         editedProduct2.setProductName("jus");
         editedProduct1.setProductQuantity(5);
         editedProduct2.setProductQuantity(40);
 
-        productRepository.set("abc", editedProduct1);
-        productRepository.set("def", editedProduct2);
+        productRepository.update(product1.getProductId(), editedProduct1);
+        productRepository.update(product2.getProductId(), editedProduct2);
 
-        Product target1 = productRepository.findById("abc");
-        Product target2 = productRepository.findById("def");
+        Product target1 = productRepository.findById(product1.getProductId());
+        Product target2 = productRepository.findById(product2.getProductId());
 
         assertEquals("susu", target1.getProductName());
         assertEquals("jus", target2.getProductName());
@@ -169,26 +164,20 @@ class ProductRepositoryTest {
     @Test
     void testEditDifferentId() {  // Test editing product with another product with different id
         Product product1 = new Product();
-        product1.setProductId("abc");
         product1.setProductName("teh");
         product1.setProductQuantity(10);
         productRepository.create(product1);
 
         Product product2 = new Product();
-        product2.setProductId("def");
         product2.setProductName("kopi");
         product2.setProductQuantity(20);
         productRepository.create(product2);
 
-        Product editedProduct = productRepository.findById("def");
+        Product editedProduct = productRepository.findById(product2.getProductId());
         editedProduct.setProductName("jus");
-        productRepository.set("abc", editedProduct);  // Seharusnya tidak bisa diedit karena editedProduct punya id "def"
+        productRepository.update(product1.getProductId(), editedProduct);  // Seharusnya tidak bisa diedit karena editedProduct punya id "def"
 
-        Product target = productRepository.findById("abc");
-
-        System.out.println(target.getProductId());
-        System.out.println(target.getProductName());
-        System.out.println(target.getProductQuantity());
+        Product target = productRepository.findById(product1.getProductId());
 
         assertEquals("teh", target.getProductName());
         assertEquals(10, target.getProductQuantity());
@@ -197,7 +186,27 @@ class ProductRepositoryTest {
     @Test
     void testEditNonExistingProduct() {
         Product product1 = new Product();
+        product1.setProductName("teh");
+        product1.setProductQuantity(10);
+        productRepository.create(product1);
 
+        Product product2 = new Product();
+        product2.setProductName("kopi");
+        product2.setProductQuantity(20);
+
+        Product editedProduct = productRepository.findById(product2.getProductId());
+        try {
+            editedProduct.setProductName("jus");
+            editedProduct.setProductQuantity(50);
+        } catch (Exception e) {
+            assertNull(editedProduct);
+            return;
+        }
+        productRepository.update(product1.getProductId(), editedProduct);
+        Product target = productRepository.findById(product1.getProductId());
+
+        assertEquals("teh", target.getProductName());
+        assertEquals(10, target.getProductQuantity());
 
     }
 
@@ -209,7 +218,7 @@ class ProductRepositoryTest {
         product.setProductName("teh");
         product.setProductQuantity(10);
         productRepository.create(product);
-        productRepository.delete(product);
+        productRepository.delete(product.getProductId());
         Iterator<Product> productIterator = productRepository.findAll();
         assertFalse(productIterator.hasNext());
     }
@@ -217,11 +226,10 @@ class ProductRepositoryTest {
     @Test
     void testDeleteNonExistingProduct() {
         Product product = new Product();
-        product.setProductId("aaaaa");
         product.setProductName("aqua");
         product.setProductQuantity(0);
 
-        productRepository.delete(product);
+        productRepository.delete(product.getProductId());
 
         Iterator<Product> productIterator = productRepository.findAll();
         assertFalse(productIterator.hasNext(), "Repository seharusnya tetap kosong setelah mencoba menghapus produk yang tidak ada");
@@ -231,17 +239,15 @@ class ProductRepositoryTest {
     void testDeleteOneProduct() {
         Product product1 = new Product();
         Product product2 = new Product();
-        product1.setProductId("abc");
         product1.setProductName("teh");
         product1.setProductQuantity(10);
-        product2.setProductId("def");
         product2.setProductName("kopi");
         product2.setProductQuantity(20);
 
         productRepository.create(product1);
         productRepository.create(product2);
 
-        productRepository.delete(product1);
+        productRepository.delete(product1.getProductId());
         Iterator<Product> iterator = productRepository.findAll();
 
         assertTrue(iterator.hasNext());

@@ -55,7 +55,7 @@ public class ProductServiceTest {
         editedProduct.setProductQuantity(51);
         editedProduct.setProductName("kopi");
 
-        service.update(editedProduct);
+        service.update(editedProduct.getProductId(), editedProduct);
 
         Product target = service.findById("abc");
 
@@ -80,7 +80,7 @@ public class ProductServiceTest {
         Product editedProduct = service.findById("def");
         editedProduct.setProductQuantity(30);
         editedProduct.setProductName("susu");
-        service.update(editedProduct);
+        service.update(editedProduct.getProductId(), editedProduct);
 
         Product target = service.findById("abc");
         assertEquals("teh", target.getProductName());
@@ -94,7 +94,7 @@ public class ProductServiceTest {
         product.setProductName("teh");
         product.setProductQuantity(50);
         service.create(product);
-        service.delete(product);
+        service.deleteById(product.getProductId());
 
         List<Product> products = service.findAll();
         assertTrue(products.isEmpty());
@@ -114,7 +114,7 @@ public class ProductServiceTest {
 
         service.create(product);
 
-        service.delete(nonExistingProduct);
+        service.deleteById(nonExistingProduct.getProductId());
 
         List<Product> products = service.findAll();
         assertFalse(products.isEmpty());
