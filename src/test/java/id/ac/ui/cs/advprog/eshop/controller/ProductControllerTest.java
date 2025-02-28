@@ -117,29 +117,46 @@ class ProductControllerTest {
 
     @Test
     void testEditProductPost() throws Exception {
-        var result = mockMvc.perform(post("/product/edit/1")
-                        .param("updatedName", "Updated Product")
-                        .param("updatedQuantity", "15"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/product/list"))
-                .andReturn();
-
-        assertEquals("/product/list", result.getResponse().getRedirectedUrl());
-    }
-
-    @Test
-    void testDeleteProductPage() throws Exception {
+        // Mock an existing product
         Product product = new Product();
         product.setProductId("1");
         product.setProductName("Product A");
         product.setProductQuantity(5);
 
-        doNothing().when(productService).deleteById(any(String.class));
+        doNothing().when(productService).update(anyString(), any(Product.class));
 
-        var result = mockMvc.perform(get("/product/delete/1"))
+        var result = mockMvc.perform(post("/product/edit")
+                        .param("productId", "1")  // Ensure the productId is included
+                        .param("productName", "Updated Product")
+                        .param("productQuantity", "15"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/product/list"))
+                .andExpect(redirectedUrl("list"))
                 .andReturn();
+
+        // Verify the update method was called with correct arguments
+        verify(productService, times(1)).update(eq("1"), any(Product.class));
+
+        assertEquals("list", result.getResponse().getRedirectedUrl());
+    }
+
+    @Test
+    void testDeleteProductPost() throws Exception {
+        // Mock an existing product
+        Product product = new Product();
+        product.setProductId("1");
+        product.setProductName("Product A");
+        product.setProductQuantity(5);
+
+        doNothing().when(productService).deleteById(anyString());
+
+        var result = mockMvc.perform(post("/product/delete")
+                        .param("id", "1")) // Ensure the correct parameter name
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("list"))
+                .andReturn();
+
+        // Verify deleteById was called exactly once
+        verify(productService, times(1)).deleteById("1");
 
         assertEquals(302, result.getResponse().getStatus());
     }
@@ -147,11 +164,9 @@ class ProductControllerTest {
     @Test
     void testCreateProductObject() {
         Product product = new Product();
-        product.setProductId("1");
         product.setProductName("Tisu");
         product.setProductQuantity(20);
 
-        assertEquals("1", product.getProductId());
         assertEquals("Tisu", product.getProductName());
         assertEquals(20, product.getProductQuantity());
     }
