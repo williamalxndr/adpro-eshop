@@ -55,7 +55,7 @@ public class ProductServiceTest {
         editedProduct.setProductQuantity(51);
         editedProduct.setProductName("kopi");
 
-        service.update(editedProduct);
+        service.update(editedProduct.getProductId(), editedProduct);
 
         Product target = service.findById("abc");
 
@@ -80,7 +80,7 @@ public class ProductServiceTest {
         Product editedProduct = service.findById("def");
         editedProduct.setProductQuantity(30);
         editedProduct.setProductName("susu");
-        service.update(editedProduct);
+        service.update(editedProduct.getProductId(), editedProduct);
 
         Product target = service.findById("abc");
         assertEquals("teh", target.getProductName());

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 @Service
-public class ProductServiceImpl implements ProductService {
+public class ProductServiceImpl implements ServiceInterface<Product> {
 
     @Autowired
     private ProductRepository productRepository;
@@ -35,8 +35,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void update(Product updatedProduct) {
-        String id = updatedProduct.getProductId();
+    public void update(String id, Product updatedProduct) {
         productRepository.update(id, updatedProduct);
     }
 

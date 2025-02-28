@@ -116,8 +116,6 @@ class ProductControllerTest {
 
     @Test
     void testEditProductPost() throws Exception {
-        doNothing().when(productService).update(any(Product.class));
-
         var result = mockMvc.perform(post("/product/edit/1")
                         .param("updatedName", "Updated Product")
                         .param("updatedQuantity", "15"))
@@ -135,7 +133,6 @@ class ProductControllerTest {
         product.setProductName("Product A");
         product.setProductQuantity(5);
 
-        when(productService.findById("1")).thenReturn(product);
         doNothing().when(productService).deleteById(any(String.class));
 
         var result = mockMvc.perform(get("/product/delete/1"))

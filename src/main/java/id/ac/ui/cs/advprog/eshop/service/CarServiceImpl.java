@@ -11,7 +11,7 @@ import java.util.List;
 
 
 @Service
-public class CarServiceImpl implements CarService{
+public class CarServiceImpl implements ServiceInterface<Car>{
     @Autowired
     private CarRepository carRepository;
 
