@@ -11,12 +11,11 @@ import java.util.Iterator;
 @Repository
 public class ProductRepository implements RepositoryInterface<Product> {
     private List<Product> productData = new ArrayList<>();
-    private int idIterator = 0;
 
     public Product create(Product product) {
         if (product.getProductId() == null) {
-            idIterator++;
-            product.setProductId(String.valueOf(idIterator));
+            String id = IdGenerator.generateUUID();
+            product.setProductId(id);
         }
         productData.add(product);
         return product;
