@@ -16,28 +16,80 @@ public class PaymentTest {
 
     @BeforeEach
     void setUp() {
-        this.payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", "BANK_TRANSFER");
     }
 
     @Test
-    void testCreatePayment() {
+    void testCreatePaymentBankTransfer() {
         HashMap<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "ESHOP19238FFF331");
         paymentData.put("bankName", "BCA");
         paymentData.put("referenceCode", "620ccd71-d06b-4554-ba35-35e28eb9caed");
-        Payment payment1 = new Payment("8b290f4f-26d0-4eb2-b78b-dd83474fe451", "BANK_TRANSFER", paymentData);
+        payment = new Payment("8b290f4f-26d0-4eb2-b78b-dd83474fe451", "BANK_TRANSFER", paymentData);
 
-        assertEquals("8b290f4f-26d0-4eb2-b78b-dd83474fe451", payment1.getId());
-        assertEquals("BANK_TRANSFER", payment1.getMethod());
-        assertEquals("ESHOP19238FFF331", payment1.getPaymentData().get("voucherCode"));
-        assertEquals("BCA", payment1.getPaymentData().get("bankName"));
-        assertEquals("620ccd71-d06b-4554-ba35-35e28eb9caed", payment1.getPaymentData().get("referenceCode"));
+        assertEquals("8b290f4f-26d0-4eb2-b78b-dd83474fe451", payment.getId());
+        assertEquals("BANK_TRANSFER", payment.getMethod());
+        assertEquals("BCA", payment.getPaymentData().get("bankName"));
+        assertEquals("620ccd71-d06b-4554-ba35-35e28eb9caed", payment.getPaymentData().get("referenceCode"));
+    }
+
+    @Test
+    void testCreatePaymentVoucherCode() {
+        HashMap<String, String> paymentData = new HashMap<>();
+        paymentData.put("voucherCode", "ESHOP19238FFF331");
+        payment = new Payment("8b290f4f-26d0-4eb2-b78b-dd83474fe451", "VOUCHER_CODE", paymentData);
+
+        assertEquals("8b290f4f-26d0-4eb2-b78b-dd83474fe451", payment.getId());
+        assertEquals("ESHOP19238FFF331", payment.getPaymentData().get("voucherCode"));
     }
 
     @Test
     void testStatusVoucherCodeSuccess() {
+        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", "VOUCHER_CODE");
+
         HashMap<String, String> paymentData = new HashMap<>();
         paymentData.put("voucherCode", "ESHOP19238FFF331");
+        payment.setPaymentData(paymentData);
+
+        assertEquals(PaymentStatus.SUCCESS.getValue(), payment.getStatus());
+    }
+
+    @Test
+    void testStatusVoucherCodeNot16Characters() {
+        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", "VOUCHER_CODE");
+
+        HashMap<String, String> paymentData = new HashMap<>();
+        paymentData.put("voucherCode", "ESHOP19238FFF3311jkd");
+        payment.setPaymentData(paymentData);
+
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
+    }
+
+    @Test
+    void testStatusVoucherCodeNotStartWithEshop() {
+        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", "VOUCHER_CODE");
+
+        HashMap<String, String> paymentData = new HashMap<>();
+        paymentData.put("voucherCode", "SHOP19238FFF331");
+        payment.setPaymentData(paymentData);
+
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
+    }
+
+    @Test
+    void testStatusVoucherCodeNot8Numerical() {
+        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", "VOUCHER_CODE");
+
+        HashMap<String, String> paymentData = new HashMap<>();
+        paymentData.put("voucherCode", "SHOP19238FFF33d");
+        payment.setPaymentData(paymentData);
+
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
+    }
+
+    @Test
+    void testBankTransferSuccess() {
+        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", "BANK_TRANSFER");
+
+        HashMap<String, String> paymentData = new HashMap<>();
         paymentData.put("bankName", "BCA");
         paymentData.put("referenceCode", "620ccd71-d06b-4554-ba35-35e28eb9caed");
         payment.setPaymentData(paymentData);
@@ -46,42 +98,10 @@ public class PaymentTest {
     }
 
     @Test
-    void testStatusVoucherCodeNot16Characters() {
-        HashMap<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "ESHOP19238FFF3311jkd");
-        paymentData.put("bankName", "BCA");
-        paymentData.put("referenceCode", "620ccd71-d06b-4554-ba35-35e28eb9caed");
-        payment.setPaymentData(paymentData);
-
-        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
-    }
-
-    @Test
-    void testStatusVoucherCodeNotStartWithEshop() {
-        HashMap<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "SHOP19238FFF331");
-        paymentData.put("bankName", "BCA");
-        paymentData.put("referenceCode", "620ccd71-d06b-4554-ba35-35e28eb9caed");
-        payment.setPaymentData(paymentData);
-
-        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
-    }
-
-    @Test
-    void testStatusVoucherCodeNot8Numerical() {
-        HashMap<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "SHOP19238FFF33d");
-        paymentData.put("bankName", "BCA");
-        paymentData.put("referenceCode", "620ccd71-d06b-4554-ba35-35e28eb9caed");
-        payment.setPaymentData(paymentData);
-
-        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
-    }
-
-    @Test
     void testBankNameEmpty() {
+        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", "BANK_TRANSFER");
+
         HashMap<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "ESHOP19238FFF331");
         paymentData.put("bankName", "");
         paymentData.put("referenceCode", "620ccd71-d06b-4554-ba35-35e28eb9caed");
         payment.setPaymentData(paymentData);
@@ -91,8 +111,9 @@ public class PaymentTest {
 
     @Test
     void testReferenceCodeEmpty() {
+        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", "BANK_TRANSFER");
+
         HashMap<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "ESHOP19238FFF331");
         paymentData.put("bankName", "BCA");
         paymentData.put("referenceCode", "");
         payment.setPaymentData(paymentData);

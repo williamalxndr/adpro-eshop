@@ -30,9 +30,13 @@ public class Payment {
     }
 
     void checkStatus() {
-        if (isValidVoucher(paymentData.get("voucherCode"))
-                && !paymentData.get("bankName").isEmpty()
-                && !paymentData.get("referenceCode").isEmpty()) {
+        if (method.equals("VOUCHER_CODE")) {
+            if (isValidVoucher(paymentData.get("voucherCode"))){
+                this.status = PaymentStatus.SUCCESS.getValue();
+            } else {
+                this.status = PaymentStatus.REJECTED.getValue();
+            }
+        } else if (!paymentData.get("bankName").isEmpty() && !paymentData.get("referenceCode").isEmpty()) {
             this.status = PaymentStatus.SUCCESS.getValue();
         } else {
             this.status = PaymentStatus.REJECTED.getValue();
