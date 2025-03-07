@@ -51,4 +51,13 @@ public class Payment {
                 voucherCode.startsWith("ESHOP") &&
                 voucherCode.replaceAll("\\D", "").length() == 8;
     }
+
+    public void setStatus(String status) {
+        if (PaymentStatus.contains(status)) {
+            this.status = status;
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
+    }
 }

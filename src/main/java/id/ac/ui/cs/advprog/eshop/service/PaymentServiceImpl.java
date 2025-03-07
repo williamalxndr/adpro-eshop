@@ -9,6 +9,7 @@ import id.ac.ui.cs.advprog.eshop.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -18,19 +19,42 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private PaymentRepository paymentRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
     @Override
-    public Payment addPayment(Order order, String method, Map<String, String> paymentData) {
+    public Payment addPayment(Order order, String method, HashMap<String, String> paymentData) {
+        Payment payment = new Payment(order.getId(), method, paymentData);
+        paymentRepository.save(payment);
+
+        return payment;
     }
 
     @Override
     public Payment setStatus(Payment payment, String status) {
+        Payment p = paymentRepository.findById(payment.getId());
+        if (p == null) {
+            throw new NoSuchElementException();
+        }
+
+        p.setStatus(status);
+        paymentRepository.save(p);
+
+        Order order = orderRepository.findById(payment.getId());
+        String orderStatus = status.equals("REJECTED") ? OrderStatus.FAILED.getValue() : "SUCCESS";
+        order.setStatus(orderStatus);
+        orderRepository.save(order);
+
+        return payment;
     }
 
     @Override
     public Payment getPayment(String paymentId) {
+        return paymentRepository.findById(paymentId);
     }
 
     @Override
     public List<Payment> getAllPayments() {
+        return paymentRepository.findAll();
     }
 }

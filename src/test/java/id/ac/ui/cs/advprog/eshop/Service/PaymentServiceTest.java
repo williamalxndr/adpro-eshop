@@ -57,7 +57,7 @@ public class PaymentServiceTest {
         Payment paymentVoucher = payments.get(0);
         doReturn(paymentVoucher).when(paymentRepository).save(paymentVoucher);
 
-        Payment result = paymentService.save(order, paymentVoucher.getMethod(), paymentVoucher.getPaymentData());
+        Payment result = paymentService.addPayment(order, paymentVoucher.getMethod(), paymentVoucher.getPaymentData());
         verify(paymentRepository, times(1)).save(any(Payment.class));
         assertEquals("838fd714-d420-4db6-9ff7-a2038ec287fb", result.getId());
         assertEquals(paymentVoucher.getMethod(), result.getMethod());
@@ -69,7 +69,7 @@ public class PaymentServiceTest {
         Payment paymentBank = payments.get(1);
         doReturn(paymentBank).when(paymentRepository).save(paymentBank);
 
-        Payment result = paymentService.save(order, paymentBank.getMethod(), paymentBank.getPaymentData());
+        Payment result = paymentService.addPayment(order, paymentBank.getMethod(), paymentBank.getPaymentData());
         verify(paymentRepository, times(1)).save(any(Payment.class));
         assertEquals(paymentBank.getMethod(), result.getMethod());
         assertEquals(paymentBank.getStatus(), result.getStatus());
@@ -79,7 +79,7 @@ public class PaymentServiceTest {
     void testSetStatusSuccess() {
         Payment paymentVoucher = payments.get(0);
 
-        doReturn(paymentVoucher).when(paymentRepository.save(any(Payment.class)));
+        doReturn(paymentVoucher).when(paymentRepository).save(any(Payment.class));
         Payment result = paymentService.setStatus(paymentVoucher, PaymentStatus.SUCCESS.getValue());
 
         assertEquals("SUCCESS", result.getStatus());
@@ -90,7 +90,7 @@ public class PaymentServiceTest {
     @Test
     void testSetStatusRejected() {
         Payment paymentBank = payments.get(1);
-        doReturn(paymentBank).when(paymentRepository.save(any(Payment.class)));
+        doReturn(paymentBank).when(paymentRepository).save(any(Payment.class));
 
         Payment result = paymentService.setStatus(paymentBank, PaymentStatus.REJECTED.getValue());
         assertEquals("REJECTED", result.getStatus());
@@ -103,10 +103,10 @@ public class PaymentServiceTest {
         Payment paymentVoucher = payments.get(0);
         doReturn(paymentVoucher).when(paymentRepository).findById(paymentVoucher.getId());
 
-        Payment result = paymentService.getPayment(payment.getId());
-        assertEquals(payment.getId(), result.getId());
-        assertEquals(payment.getMethod(), result.getMethod());
-        assertEquals(payment.getStatus(), result.getStatus());
+        Payment result = paymentService.getPayment(paymentVoucher.getId());
+        assertEquals(paymentVoucher.getId(), result.getId());
+        assertEquals(paymentVoucher.getMethod(), result.getMethod());
+        assertEquals(paymentVoucher.getStatus(), result.getStatus());
     }
 
     @Test
