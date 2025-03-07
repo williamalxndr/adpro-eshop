@@ -25,28 +25,23 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Payment addPayment(Order order, String method, HashMap<String, String> paymentData) {
         Payment payment = new Payment(order.getId(), method, paymentData);
-        paymentRepository.save(payment);
-
-        orderRepository.save(order);
-        return payment;
+        return paymentRepository.save(payment);
     }
 
     @Override
     public Payment setStatus(Payment payment, String status) {
-        Payment p = paymentRepository.findById(payment.getId());
-        if (p == null) {
-            throw new NoSuchElementException();
-        }
-
-        p.setStatus(status);
-        paymentRepository.save(p);
+        payment.setStatus(status);
+        paymentRepository.save(payment);
 
         Order order = orderRepository.findById(payment.getId());
-        String orderStatus = status.equals("REJECTED") ? OrderStatus.FAILED.getValue() : "SUCCESS";
-        order.setStatus(orderStatus);
+        if (status.equals(PaymentStatus.REJECTED.getValue())) {
+            order.setStatus(OrderStatus.FAILED.getValue());
+        } else if (status.equals(PaymentStatus.SUCCESS.getValue())) {
+            order.setStatus(OrderStatus.SUCCESS.getValue());
+        }
         orderRepository.save(order);
 
-        return p;
+        return payment;
     }
 
     @Override

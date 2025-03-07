@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 @Getter
 public class Payment {
+    @Setter
     private String id;
     private String method;
     private String status;

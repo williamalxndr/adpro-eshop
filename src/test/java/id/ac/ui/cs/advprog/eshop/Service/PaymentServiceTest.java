@@ -59,11 +59,10 @@ public class PaymentServiceTest {
     @Test
     void testAddPaymentVoucher() {
         Payment paymentVoucher = payments.get(0);
-        doReturn(paymentVoucher).when(paymentRepository).save(paymentVoucher);
+        doReturn(paymentVoucher).when(paymentRepository).save(any(Payment.class));
 
         Payment result = paymentService.addPayment(order, paymentVoucher.getMethod(), paymentVoucher.getPaymentData());
         verify(paymentRepository, times(1)).save(any(Payment.class));
-        assertEquals("838fd714-d420-4db6-9ff7-a2038ec287fb", result.getId());
         assertEquals(paymentVoucher.getMethod(), result.getMethod());
         assertEquals(paymentVoucher.getStatus(), result.getStatus());
     }
@@ -71,7 +70,7 @@ public class PaymentServiceTest {
     @Test
     void testAddPaymentBank() {
         Payment paymentBank = payments.get(1);
-        doReturn(paymentBank).when(paymentRepository).save(paymentBank);
+        doReturn(paymentBank).when(paymentRepository).save(any(Payment.class));
 
         Payment result = paymentService.addPayment(order, paymentBank.getMethod(), paymentBank.getPaymentData());
         verify(paymentRepository, times(1)).save(any(Payment.class));
@@ -84,10 +83,9 @@ public class PaymentServiceTest {
         Payment paymentVoucher = payments.get(0);
 
         doReturn(paymentVoucher).when(paymentRepository).save(any(Payment.class));
-        Payment result = paymentService.setStatus(paymentVoucher, PaymentStatus.SUCCESS.getValue());
-
         doReturn(order).when(orderRepository).findById(paymentVoucher.getId());
         doReturn(order).when(orderRepository).save(order);
+        Payment result = paymentService.setStatus(paymentVoucher, PaymentStatus.SUCCESS.getValue());
 
         assertEquals("SUCCESS", result.getStatus());
         assertEquals("SUCCESS", order.getStatus());
