@@ -10,12 +10,37 @@ public class Payment {
     private String id;
     private String method;
     private String status;
-    @Setter
     private HashMap<String, String> paymentData = new HashMap<>();
 
     Payment(String id, String method) {
+        this.id = id;
+        this.method = method;
     }
 
     Payment(String id, String method, HashMap<String, String> paymentData) {
+        this.id = id;
+        this.method = method;
+        setPaymentData(paymentData);
+    }
+
+    void setPaymentData(HashMap<String, String> paymentData) {
+        this.paymentData = paymentData;
+        checkStatus();
+    }
+
+    void checkStatus() {
+        if (isValidVoucher(paymentData.get("voucherCode"))
+                && !paymentData.get("bankName").isEmpty()
+                && !paymentData.get("referenceCode").isEmpty()) {
+            this.status = "SUCCESS";
+        } else {
+            this.status = "REJECTED";
+        }
+    }
+
+    private boolean isValidVoucher(String voucherCode) {
+        return voucherCode.length() == 16 &&
+                voucherCode.startsWith("ESHOP") &&
+                voucherCode.replaceAll("\\D", "").length() == 8;
     }
 }
