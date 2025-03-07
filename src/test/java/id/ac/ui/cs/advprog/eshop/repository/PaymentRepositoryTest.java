@@ -49,7 +49,7 @@ public class PaymentRepositoryTest {
     @Test
     void testFindAllEmpty() {
         List<Payment> payments = paymentRepository.findAll();
-        assertNull(payments);
+        assertTrue(payments.isEmpty());
     }
 
     @Test
