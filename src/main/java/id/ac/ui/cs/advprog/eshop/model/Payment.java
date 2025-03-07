@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
+import id.ac.ui.cs.advprog.eshop.enums.PaymentMethod;
 import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,16 +31,18 @@ public class Payment {
     }
 
     void checkStatus() {
-        if (method.equals("VOUCHER_CODE")) {
+        if (method.equals(PaymentMethod.VOUCHER_CODE.getValue())) {
             if (isValidVoucher(paymentData.get("voucherCode"))){
                 this.status = PaymentStatus.SUCCESS.getValue();
             } else {
                 this.status = PaymentStatus.REJECTED.getValue();
             }
-        } else if (!paymentData.get("bankName").isEmpty() && !paymentData.get("referenceCode").isEmpty()) {
-            this.status = PaymentStatus.SUCCESS.getValue();
-        } else {
-            this.status = PaymentStatus.REJECTED.getValue();
+        } else if (method.equals(PaymentMethod.BANK_TRANSFER.getValue())) {
+            if (!paymentData.get("bankName").isEmpty() && !paymentData.get("referenceCode").isEmpty()) {
+                this.status = PaymentStatus.SUCCESS.getValue();
+            } else {
+                this.status = PaymentStatus.REJECTED.getValue();
+            }
         }
     }
 

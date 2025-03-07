@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
+import id.ac.ui.cs.advprog.eshop.enums.PaymentMethod;
 import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ public class PaymentTest {
         HashMap<String, String> paymentData = new HashMap<>();
         paymentData.put("bankName", "BCA");
         paymentData.put("referenceCode", "620ccd71-d06b-4554-ba35-35e28eb9caed");
-        payment = new Payment("8b290f4f-26d0-4eb2-b78b-dd83474fe451", "BANK_TRANSFER", paymentData);
+        payment = new Payment("8b290f4f-26d0-4eb2-b78b-dd83474fe451", PaymentMethod.BANK_TRANSFER.getValue(), paymentData);
 
         assertEquals("8b290f4f-26d0-4eb2-b78b-dd83474fe451", payment.getId());
         assertEquals("BANK_TRANSFER", payment.getMethod());
@@ -35,7 +36,7 @@ public class PaymentTest {
     void testCreatePaymentVoucherCode() {
         HashMap<String, String> paymentData = new HashMap<>();
         paymentData.put("voucherCode", "ESHOP19238FFF331");
-        payment = new Payment("8b290f4f-26d0-4eb2-b78b-dd83474fe451", "VOUCHER_CODE", paymentData);
+        payment = new Payment("8b290f4f-26d0-4eb2-b78b-dd83474fe451", PaymentMethod.VOUCHER_CODE.getValue(), paymentData);
 
         assertEquals("8b290f4f-26d0-4eb2-b78b-dd83474fe451", payment.getId());
         assertEquals("ESHOP19238FFF331", payment.getPaymentData().get("voucherCode"));
@@ -43,7 +44,7 @@ public class PaymentTest {
 
     @Test
     void testStatusVoucherCodeSuccess() {
-        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", "VOUCHER_CODE");
+        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", PaymentMethod.VOUCHER_CODE.getValue());
 
         HashMap<String, String> paymentData = new HashMap<>();
         paymentData.put("voucherCode", "ESHOP19238FFF331");
@@ -54,7 +55,7 @@ public class PaymentTest {
 
     @Test
     void testStatusVoucherCodeNot16Characters() {
-        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", "VOUCHER_CODE");
+        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", PaymentMethod.VOUCHER_CODE.getValue());
 
         HashMap<String, String> paymentData = new HashMap<>();
         paymentData.put("voucherCode", "ESHOP19238FFF3311jkd");
@@ -65,7 +66,7 @@ public class PaymentTest {
 
     @Test
     void testStatusVoucherCodeNotStartWithEshop() {
-        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", "VOUCHER_CODE");
+        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", PaymentMethod.VOUCHER_CODE.getValue());
 
         HashMap<String, String> paymentData = new HashMap<>();
         paymentData.put("voucherCode", "SHOP19238FFF331");
@@ -76,7 +77,7 @@ public class PaymentTest {
 
     @Test
     void testStatusVoucherCodeNot8Numerical() {
-        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", "VOUCHER_CODE");
+        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", PaymentMethod.VOUCHER_CODE.getValue());
 
         HashMap<String, String> paymentData = new HashMap<>();
         paymentData.put("voucherCode", "SHOP19238FFF33d");
@@ -87,7 +88,7 @@ public class PaymentTest {
 
     @Test
     void testBankTransferSuccess() {
-        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", "BANK_TRANSFER");
+        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", PaymentMethod.BANK_TRANSFER.getValue());
 
         HashMap<String, String> paymentData = new HashMap<>();
         paymentData.put("bankName", "BCA");
@@ -99,7 +100,7 @@ public class PaymentTest {
 
     @Test
     void testBankNameEmpty() {
-        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", "BANK_TRANSFER");
+        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", PaymentMethod.BANK_TRANSFER.getValue());
 
         HashMap<String, String> paymentData = new HashMap<>();
         paymentData.put("bankName", "");
@@ -111,7 +112,7 @@ public class PaymentTest {
 
     @Test
     void testReferenceCodeEmpty() {
-        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", "BANK_TRANSFER");
+        payment = new Payment("958079b6-04ca-49d1-a2a0-f3ecf767bf90", PaymentMethod.BANK_TRANSFER.getValue());
 
         HashMap<String, String> paymentData = new HashMap<>();
         paymentData.put("bankName", "BCA");
