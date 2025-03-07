@@ -31,6 +31,10 @@ public class Payment {
     }
 
     void checkStatus() {
+        if (paymentData.isEmpty()) {
+            this.status = PaymentStatus.REJECTED.getValue();
+            return;
+        }
         if (method.equals(PaymentMethod.VOUCHER_CODE.getValue())) {
             if (isValidVoucher(paymentData.get("voucherCode"))){
                 this.status = PaymentStatus.SUCCESS.getValue();

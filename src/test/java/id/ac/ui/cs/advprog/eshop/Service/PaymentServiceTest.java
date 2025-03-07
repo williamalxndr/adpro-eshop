@@ -5,6 +5,7 @@ import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 import id.ac.ui.cs.advprog.eshop.model.Order;
 import id.ac.ui.cs.advprog.eshop.model.Payment;
 import id.ac.ui.cs.advprog.eshop.model.Product;
+import id.ac.ui.cs.advprog.eshop.repository.OrderRepository;
 import id.ac.ui.cs.advprog.eshop.repository.PaymentRepository;
 import id.ac.ui.cs.advprog.eshop.service.PaymentServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +28,9 @@ public class PaymentServiceTest {
 
     @Mock
     PaymentRepository paymentRepository;
+
+    @Mock
+    OrderRepository orderRepository;
 
     List<Payment> payments;
     Order order;
@@ -82,6 +86,9 @@ public class PaymentServiceTest {
         doReturn(paymentVoucher).when(paymentRepository).save(any(Payment.class));
         Payment result = paymentService.setStatus(paymentVoucher, PaymentStatus.SUCCESS.getValue());
 
+        doReturn(order).when(orderRepository).findById(paymentVoucher.getId());
+        doReturn(order).when(orderRepository).save(order);
+
         assertEquals("SUCCESS", result.getStatus());
         assertEquals("SUCCESS", order.getStatus());
         verify(paymentRepository, times(1)).save(paymentVoucher);
@@ -91,6 +98,8 @@ public class PaymentServiceTest {
     void testSetStatusRejected() {
         Payment paymentBank = payments.get(1);
         doReturn(paymentBank).when(paymentRepository).save(any(Payment.class));
+        doReturn(order).when(orderRepository).findById(paymentBank.getId());
+        doReturn(order).when(orderRepository).save(order);
 
         Payment result = paymentService.setStatus(paymentBank, PaymentStatus.REJECTED.getValue());
         assertEquals("REJECTED", result.getStatus());

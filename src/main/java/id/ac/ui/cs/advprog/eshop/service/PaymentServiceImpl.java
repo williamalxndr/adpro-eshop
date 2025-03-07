@@ -27,6 +27,7 @@ public class PaymentServiceImpl implements PaymentService {
         Payment payment = new Payment(order.getId(), method, paymentData);
         paymentRepository.save(payment);
 
+        orderRepository.save(order);
         return payment;
     }
 
@@ -45,7 +46,7 @@ public class PaymentServiceImpl implements PaymentService {
         order.setStatus(orderStatus);
         orderRepository.save(order);
 
-        return payment;
+        return p;
     }
 
     @Override
