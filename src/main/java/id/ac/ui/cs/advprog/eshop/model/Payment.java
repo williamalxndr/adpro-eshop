@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
+import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,9 +33,9 @@ public class Payment {
         if (isValidVoucher(paymentData.get("voucherCode"))
                 && !paymentData.get("bankName").isEmpty()
                 && !paymentData.get("referenceCode").isEmpty()) {
-            this.status = "SUCCESS";
+            this.status = PaymentStatus.SUCCESS.getValue();
         } else {
-            this.status = "REJECTED";
+            this.status = PaymentStatus.REJECTED.getValue();
         }
     }
 
