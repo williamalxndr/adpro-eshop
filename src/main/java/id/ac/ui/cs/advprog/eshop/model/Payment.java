@@ -14,12 +14,12 @@ public class Payment {
     private String status;
     private HashMap<String, String> paymentData = new HashMap<>();
 
-    Payment(String id, String method) {
+    public Payment(String id, String method) {
         this.id = id;
         this.method = method;
     }
 
-    Payment(String id, String method, HashMap<String, String> paymentData) {
+    public Payment(String id, String method, HashMap<String, String> paymentData) {
         this.id = id;
         this.method = method;
         setPaymentData(paymentData);
